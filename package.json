@@ -1,7 +1,7 @@
 {
   "name": "alcuin-config-api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc -p ./tsconfig.json"
