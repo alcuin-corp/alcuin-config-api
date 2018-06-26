@@ -14,9 +14,9 @@ export declare class Graph<K, V> implements IGraph<K, V> {
     get(id: K): V | undefined;
     childrenOf(id: K): K[];
     parentsOf(id: K): K[];
-    visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T): T[];
+    visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[];
     allChildrenOf(id: K): V[];
-    visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T): T[];
+    visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[];
     allParentsOf(id: K): V[];
     readonly parentsIndex: Map<K, K[]>;
     readonly childrenIndex: Map<K, K[]>;

@@ -62,16 +62,16 @@ export class Graph<K, V> implements IGraph<K, V> {
         return this.parentsIndex.get(id) || [];
     }
 
-    public visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T): T[] {
-        return this.visitAll(id, this.childrenOf.bind(this), visitor);
+    public visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[] {
+        return this.visitAll(id, this.childrenOf.bind(this), visitor, options);
     }
 
     public allChildrenOf(id: K): V[] {
         return this.visitAllChildren(id, (obj, _) => obj);
     }
 
-    public visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T): T[] {
-        return this.visitAll(id, this.parentsOf.bind(this), visitor);
+    public visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[] {
+        return this.visitAll(id, this.parentsOf.bind(this), visitor, options);
     }
 
     public allParentsOf(id: K): V[] {

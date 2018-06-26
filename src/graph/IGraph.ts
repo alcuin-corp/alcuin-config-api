@@ -1,9 +1,11 @@
+import { IVisitAllOptions } from ".";
+
 export interface IGraph<K, V> {
     add(v: V): IGraph<K, V>;
     get(id: K): V | undefined;
 
-    visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T): T[];
-    visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T): T[];
+    visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[];
+    visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[];
 
     allChildrenOf(id: K): V[];
     allParentsOf(id: K): V[];

@@ -45,14 +45,14 @@ class Graph {
     parentsOf(id) {
         return this.parentsIndex.get(id) || [];
     }
-    visitAllChildren(id, visitor) {
-        return this.visitAll(id, this.childrenOf.bind(this), visitor);
+    visitAllChildren(id, visitor, options) {
+        return this.visitAll(id, this.childrenOf.bind(this), visitor, options);
     }
     allChildrenOf(id) {
         return this.visitAllChildren(id, (obj, _) => obj);
     }
-    visitAllParents(id, visitor) {
-        return this.visitAll(id, this.parentsOf.bind(this), visitor);
+    visitAllParents(id, visitor, options) {
+        return this.visitAll(id, this.parentsOf.bind(this), visitor, options);
     }
     allParentsOf(id) {
         return this.visitAllParents(id, (obj, _) => obj);
