@@ -1,10 +1,14 @@
-import { IAlertDto, IExportMetadataDto, IAnyObjectDto } from ".";
+import { AnyAlert, IExportMetadataDto, IAnyObjectDto } from ".";
+declare const CONTENT = "Content";
+declare const ADDED = "Added";
 export interface IExportDto {
     Metadata: IExportMetadataDto;
-    Alerts: IAlertDto[];
-    Content: {
-        Added: IAnyObjectDto[];
+    Alerts: AnyAlert[];
+    [CONTENT]: {
+        [ADDED]: IAnyObjectDto[];
         Updated: any[];
         Deleted: any[];
     };
 }
+export declare function isExportDto(file: any): file is IExportDto;
+export {};
