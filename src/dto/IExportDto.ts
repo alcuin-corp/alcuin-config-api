@@ -3,16 +3,18 @@ import { AnyAlert, IExportMetadataDto, IAnyObjectDto } from ".";
 const CONTENT = "Content";
 const ADDED = "Added";
 
+export interface IChunkDto {
+    [ADDED]: IAnyObjectDto[];
+    Update: any[];
+    Deleted: any[];
+}
+
 export interface IExportDto {
     Metadata: IExportMetadataDto;
     Alerts: AnyAlert[];
-    [CONTENT]: {
-        [ADDED]: IAnyObjectDto[];
-        Updated: any[];
-        Deleted: any[];
-    };
+    [CONTENT]: IChunkDto;
 }
 
-export function isExportDto(file: any): file is IExportDto {
-    return CONTENT in file && ADDED in file[CONTENT];
+export function isExportDto(input: any): input is IExportDto {
+    return CONTENT in input && ADDED in input[CONTENT];
 }

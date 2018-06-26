@@ -12,6 +12,7 @@ export class Graph<K, V> implements IGraph<K, V> {
                        followings: (id: K) => K[],
                        visitor: (obj: V, lvl: number) => T): T[] {
         const result: T[] = [];
+        const visited = new Set<K>();
         const stack: Array<{currentId: K, currentLevel: number}> = [];
         stack.push({currentId: id, currentLevel: 0});
         while (true) {
@@ -19,13 +20,16 @@ export class Graph<K, V> implements IGraph<K, V> {
             if (!pop) { break; }
 
             const {currentId, currentLevel} = pop;
-            const content = this.get(currentId);
-            if (content) {
-                if (this.idFindingStrategy(content) !== id) {
-                    result.push(visitor(content, currentLevel));
-                }
-                for (const childId of followings(this.idFindingStrategy(content))) {
-                    stack.push({currentId: childId, currentLevel: currentLevel + 1});
+            if (!visited.has(currentId)) {
+                visited.add(currentId);
+                const content = this.get(currentId);
+                if (content) {
+                    if (this.idFindingStrategy(content)) {
+                        result.push(visitor(content, currentLevel));
+                    }
+                    for (const childId of followings(this.idFindingStrategy(content))) {
+                        stack.push({currentId: childId, currentLevel: currentLevel + 1});
+                    }
                 }
             }
         }
@@ -55,7 +59,7 @@ export class Graph<K, V> implements IGraph<K, V> {
         return this.visitAll(id, this.childrenOf.bind(this), visitor);
     }
 
-    public getAllChildren(id: K): V[] {
+    public allChildrenOf(id: K): V[] {
         return this.visitAllChildren(id, (obj, _) => obj);
     }
 
@@ -63,7 +67,7 @@ export class Graph<K, V> implements IGraph<K, V> {
         return this.visitAll(id, this.parentsOf.bind(this), visitor);
     }
 
-    public getAllParents(id: K): V[] {
+    public allParentsOf(id: K): V[] {
         return this.visitAllParents(id, (obj, _) => obj);
     }
 

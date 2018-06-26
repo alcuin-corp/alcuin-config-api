@@ -8,6 +8,7 @@ class Graph {
     }
     visitAll(id, followings, visitor) {
         const result = [];
+        const visited = new Set();
         const stack = [];
         stack.push({ currentId: id, currentLevel: 0 });
         while (true) {
@@ -16,13 +17,16 @@ class Graph {
                 break;
             }
             const { currentId, currentLevel } = pop;
-            const content = this.get(currentId);
-            if (content) {
-                if (this.idFindingStrategy(content) !== id) {
-                    result.push(visitor(content, currentLevel));
-                }
-                for (const childId of followings(this.idFindingStrategy(content))) {
-                    stack.push({ currentId: childId, currentLevel: currentLevel + 1 });
+            if (!visited.has(currentId)) {
+                visited.add(currentId);
+                const content = this.get(currentId);
+                if (content) {
+                    if (this.idFindingStrategy(content)) {
+                        result.push(visitor(content, currentLevel));
+                    }
+                    for (const childId of followings(this.idFindingStrategy(content))) {
+                        stack.push({ currentId: childId, currentLevel: currentLevel + 1 });
+                    }
                 }
             }
         }
@@ -43,13 +47,13 @@ class Graph {
     visitAllChildren(id, visitor) {
         return this.visitAll(id, this.childrenOf.bind(this), visitor);
     }
-    getAllChildren(id) {
+    allChildrenOf(id) {
         return this.visitAllChildren(id, (obj, _) => obj);
     }
     visitAllParents(id, visitor) {
         return this.visitAll(id, this.parentsOf.bind(this), visitor);
     }
-    getAllParents(id) {
+    allParentsOf(id) {
         return this.visitAllParents(id, (obj, _) => obj);
     }
     get parentsIndex() {

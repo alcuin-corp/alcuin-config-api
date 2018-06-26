@@ -12,9 +12,9 @@ export declare class Graph<K, V> implements IGraph<K, V> {
     childrenOf(id: K): K[];
     parentsOf(id: K): K[];
     visitAllChildren<T>(id: K, visitor: (obj: V, lvl: number) => T): T[];
-    getAllChildren(id: K): V[];
+    allChildrenOf(id: K): V[];
     visitAllParents<T>(id: K, visitor: (obj: V, lvl: number) => T): T[];
-    getAllParents(id: K): V[];
+    allParentsOf(id: K): V[];
     readonly parentsIndex: Map<K, K[]>;
     readonly childrenIndex: Map<K, K[]>;
 }
