@@ -1,5 +1,9 @@
 import { IGraph } from ".";
 
+export interface IVisitAllOptions {
+    maxDepth?: number;
+}
+
 export class Graph<K, V> implements IGraph<K, V> {
     private memoizedParentsIndex: Map<K, K[]> | undefined;
     private memoizedChildrenIndex: Map<K, K[]> | undefined;
@@ -10,25 +14,28 @@ export class Graph<K, V> implements IGraph<K, V> {
 
     public visitAll<T>(id: K,
                        followings: (id: K) => K[],
-                       visitor: (obj: V, lvl: number) => T): T[] {
+                       visitor: (obj: V, lvl: number) => T,
+                       options?: IVisitAllOptions): T[] {
+        options = options || {};
+
         const result: T[] = [];
         const visited = new Set<K>();
-        const stack: Array<{currentId: K, currentLevel: number}> = [];
-        stack.push({currentId: id, currentLevel: 0});
+        const stack: Array<{currentId: K, currentDepth: number}> = [];
+        stack.push({currentId: id, currentDepth: 0});
         while (true) {
             const pop = stack.pop();
             if (!pop) { break; }
 
-            const {currentId, currentLevel} = pop;
-            if (!visited.has(currentId)) {
+            const {currentId, currentDepth} = pop;
+            if (!visited.has(currentId) && (!options.maxDepth || currentDepth <= options.maxDepth)) {
                 visited.add(currentId);
                 const content = this.get(currentId);
                 if (content) {
                     if (this.idFindingStrategy(content)) {
-                        result.push(visitor(content, currentLevel));
+                        result.push(visitor(content, currentDepth));
                     }
                     for (const childId of followings(this.idFindingStrategy(content))) {
-                        stack.push({currentId: childId, currentLevel: currentLevel + 1});
+                        stack.push({currentId: childId, currentDepth: currentDepth + 1});
                     }
                 }
             }

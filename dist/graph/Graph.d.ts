@@ -1,4 +1,7 @@
 import { IGraph } from ".";
+export interface IVisitAllOptions {
+    maxDepth?: number;
+}
 export declare class Graph<K, V> implements IGraph<K, V> {
     private index;
     private parentFindingStrategy;
@@ -6,7 +9,7 @@ export declare class Graph<K, V> implements IGraph<K, V> {
     private memoizedParentsIndex;
     private memoizedChildrenIndex;
     constructor(index: Map<K, V>, parentFindingStrategy: (v: any) => IterableIterator<K>, idFindingStrategy: (v: V) => K);
-    visitAll<T>(id: K, followings: (id: K) => K[], visitor: (obj: V, lvl: number) => T): T[];
+    visitAll<T>(id: K, followings: (id: K) => K[], visitor: (obj: V, lvl: number) => T, options?: IVisitAllOptions): T[];
     add(v: V): IGraph<K, V>;
     get(id: K): V | undefined;
     childrenOf(id: K): K[];

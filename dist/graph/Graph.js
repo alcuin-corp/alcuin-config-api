@@ -6,26 +6,27 @@ class Graph {
         this.parentFindingStrategy = parentFindingStrategy;
         this.idFindingStrategy = idFindingStrategy;
     }
-    visitAll(id, followings, visitor) {
+    visitAll(id, followings, visitor, options) {
+        options = options || {};
         const result = [];
         const visited = new Set();
         const stack = [];
-        stack.push({ currentId: id, currentLevel: 0 });
+        stack.push({ currentId: id, currentDepth: 0 });
         while (true) {
             const pop = stack.pop();
             if (!pop) {
                 break;
             }
-            const { currentId, currentLevel } = pop;
-            if (!visited.has(currentId)) {
+            const { currentId, currentDepth } = pop;
+            if (!visited.has(currentId) && (!options.maxDepth || currentDepth <= options.maxDepth)) {
                 visited.add(currentId);
                 const content = this.get(currentId);
                 if (content) {
                     if (this.idFindingStrategy(content)) {
-                        result.push(visitor(content, currentLevel));
+                        result.push(visitor(content, currentDepth));
                     }
                     for (const childId of followings(this.idFindingStrategy(content))) {
-                        stack.push({ currentId: childId, currentLevel: currentLevel + 1 });
+                        stack.push({ currentId: childId, currentDepth: currentDepth + 1 });
                     }
                 }
             }
